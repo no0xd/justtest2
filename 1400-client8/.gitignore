@@ -1,0 +1,10 @@
+gat1400-client.iml
+.apt_generated
+.idea
+.settings
+.svn
+logs
+target
+.classpath
+.factorypath
+.project

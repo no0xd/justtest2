@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <!-- relativeToChangelogFile : 文件 file 为相对路径 -->
+    <!--注册保活实体-->
+    <include file="regist-base.xml" relativeToChangelogFile="true"/>
+    <!--订阅通知实体-->
+    <include file="changelog-base.xml" relativeToChangelogFile="true"/>
+    <!--布控警告实体-->
+    <include file="disposition-base.xml" relativeToChangelogFile="true"/>
+    <!--数据仓库实体-->
+    <include file="data-repository.xml" relativeToChangelogFile="true"/>
+</databaseChangeLog>

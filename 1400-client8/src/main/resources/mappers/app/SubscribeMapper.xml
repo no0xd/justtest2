@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.netposa.gat.mapper.SubscribeMapper">
+    <insert id="insertSubscribeList">
+        INSERT INTO subscribe
+        (ID,SubscribeID,Title,SubscribeDetail,ResourceURI,ApplicantName,ApplicantOrg,BeginTime,EndTime,ReceiveAddr,ReportInterval,
+        Reason,OperateType,SubscribeStatus,SubscribeCancelOrg,SubscribeCancelPerson,CancelTime,CancelReason,ResultImageDeclare,ResultFeatureDeclare,TabID)
+        VALUES
+        <foreach collection ="list" item="subscribe" separator =",">
+            (#{subscribe.ID},#{subscribe.SubscribeID},#{subscribe.Title},#{subscribe.SubscribeDetail},#{subscribe.ResourceURI},
+            #{subscribe.ApplicantName},#{subscribe.ApplicantOrg},#{subscribe.BeginTime},#{subscribe.EndTime},
+            #{subscribe.ReceiveAddr},#{subscribe.ReportInterval},#{subscribe.Reason},#{subscribe.OperateType},
+            #{subscribe.SubscribeStatus},#{subscribe.SubscribeCancelOrg},#{subscribe.SubscribeCancelPerson},
+            #{subscribe.CancelTime},#{subscribe.CancelReason},#{subscribe.ResultImageDeclare},#{subscribe.ResultFeatureDeclare}
+            ,#{subscribe.TabID})
+        </foreach >
+    </insert>
+
+    <select id="getSubscribeByStatus" parameterType="int" resultType="com.netposa.gat.model.subscribe.Subscribe">
+        SELECT
+        a.ID,
+        a.SubscribeID,
+        a.Title,
+        a.SubscribeDetail,
+        a.ResourceURI,
+        a.ApplicantName,
+        a.ApplicantOrg,
+        a.BeginTime,
+        a.EndTime,
+        a.ReceiveAddr,
+        a.ReportInterval,
+        a.Reason,
+        a.OperateType,
+        a.SubscribeStatus,
+        a.SubscribeCancelOrg,
+        a.SubscribeCancelPerson,
+        a.CancelTime,
+        a.CancelReason,
+        a.ResultImageDeclare,
+        a.ResultFeatureDeclare,
+        a.TabID
+        FROM subscribe a
+        where a.SubscribeStatus = #{subscribeStatus}
+    </select>
+
+    <!-- 订阅取消单位，订阅取消人，取消时间，取消原因 -->
+    <update id="cancelSubscribe" parameterType="com.netposa.gat.model.subscribe.Subscribe">
+        UPDATE subscribe
+        SET
+        <if test='subscribe.SubscribeCancelPerson!=null and subscribe.SubscribeCancelPerson!=""'>
+            SubscribeCancelPerson = #{subscribe.SubscribeCancelPerson},
+        </if>
+        <if test='subscribe.SubscribeCancelOrg!=null and subscribe.SubscribeCancelOrg!=""'>
+            SubscribeCancelOrg = #{subscribe.SubscribeCancelOrg},
+        </if>
+        <if test='subscribe.CancelTime!=null and subscribe.CancelTime!=""'>
+            CancelTime = #{subscribe.CancelTime},
+        </if>
+        <if test='subscribe.CancelReason!=null and subscribe.CancelReason!=""'>
+            CancelReason = #{subscribe.CancelReason},
+        </if>
+        <if test='subscribe.OperateType!=null and subscribe.OperateType!=""'>
+            OperateType = #{subscribe.OperateType},
+        </if>
+        <if test='subscribe.SubscribeStatus!=null and subscribe.SubscribeStatus!=""'>
+            SubscribeStatus = #{subscribe.SubscribeStatus}
+        </if>
+        WHERE SubscribeID = #{subscribe.SubscribeID}
+    </update>
+
+    <!-- 批量删除订阅 -->
+    <delete id="deleteSubscribe" parameterType="String">
+        delete from subscribe where SubscribeID in
+        <foreach item="IdsItem" collection="list" open="(" separator="," close=")">
+            #{IdsItem}
+        </foreach>
+    </delete>
+
+    <!--根据id列表批量查询订阅-->
+    <select id="querySubscribes" resultType="com.netposa.gat.model.subscribe.Subscribe">
+        SELECT * from subscribe
+        WHERE SubscribeID in
+        <foreach collection="subscribesIds" item="subscribeId" open="(" close=")" separator=",">
+            #{subscribeId}
+        </foreach>
+    </select>
+
+    <!-- 批量修改订阅 -->
+    <update id="updateSubscribe" parameterType="list">
+        UPDATE subscribe SET
+        Title = CASE SubscribeID
+        <foreach collection="list" item="item">
+            <if test="item.Title != null">
+                WHEN #{item.SubscribeID} THEN #{item.Title}
+            </if>
+        </foreach>
+        END ,
+        SubscribeDetail = CASE SubscribeID
+        <foreach collection="list" item="item">
+            <if test="item.SubscribeDetail != null">
+                WHEN #{item.SubscribeID} THEN #{item.SubscribeDetail}
+            </if>
+        </foreach>
+        END ,
+        ResourceURI = CASE SubscribeID
+        <foreach collection="list" item="item">
+            <if test="item.ResourceURI != null">
+                WHEN #{item.SubscribeID} THEN #{item.ResourceURI}
+            </if>
+        </foreach>
+        END ,
+        ApplicantName = CASE SubscribeID
+        <foreach collection="list" item="item">
+            <if test="item.ApplicantName != null">
+                WHEN #{item.SubscribeID} THEN #{item.ApplicantName}
+            </if>
+        </foreach>
+        END ,
+        ApplicantOrg = CASE SubscribeID
+        <foreach collection="list" item="item">
+            <if test="item.ApplicantOrg != null">
+                WHEN #{item.SubscribeID} THEN #{item.ApplicantOrg}
+            </if>
+        </foreach>
+        END ,
+        BeginTime = CASE SubscribeID
+        <foreach collection="list" item="item">
+            <if test="item.BeginTime != null">
+                WHEN #{item.SubscribeID} THEN #{item.BeginTime}
+            </if>
+        </foreach>
+        END ,
+        EndTime = CASE SubscribeID
+        <foreach collection="list" item="item">
+            <if test="item.EndTime != null">
+                WHEN #{item.SubscribeID} THEN #{item.EndTime}
+            </if>
+        </foreach>
+        END ,
+        ReceiveAddr = CASE SubscribeID
+        <foreach collection="list" item="item">
+            <if test="item.ReceiveAddr != null">
+                WHEN #{item.SubscribeID} THEN #{item.ReceiveAddr}
+            </if>
+        </foreach>
+        END ,
+        ReportInterval = CASE SubscribeID
+        <foreach collection="list" item="item">
+            <if test="item.ReportInterval != null">
+                WHEN #{item.SubscribeID} THEN #{item.ReportInterval}
+            </if>
+        </foreach>
+        END ,
+        Reason = CASE SubscribeId
+        <foreach collection="list" item="item">
+            <if test="item.Reason != null">
+                WHEN #{item.SubscribeID} THEN #{item.Reason}
+            </if>
+        </foreach>
+        END,
+        OperateType = CASE SubscribeId
+        <foreach collection="list" item="item">
+            <if test="item.OperateType != null">
+                WHEN #{item.SubscribeID} THEN #{item.OperateType}
+            </if>
+        </foreach>
+        END,
+        SubscribeStatus = CASE SubscribeId
+        <foreach collection="list" item="item">
+            <if test="item.SubscribeStatus != null">
+                WHEN #{item.SubscribeID} THEN #{item.SubscribeStatus}
+            </if>
+        </foreach>
+        END,
+        SubscribeCancelOrg = CASE SubscribeId
+        <foreach collection="list" item="item">
+            <if test="item.SubscribeCancelOrg != null">
+                WHEN #{item.SubscribeID} THEN #{item.SubscribeCancelOrg}
+            </if>
+        </foreach>
+        END,
+        SubscribeCancelPerson = CASE SubscribeId
+        <foreach collection="list" item="item">
+            <if test="item.SubscribeCancelPerson != null">
+                WHEN #{item.SubscribeID} THEN #{item.SubscribeCancelPerson}
+            </if>
+        </foreach>
+        END,
+        CancelTime = CASE SubscribeId
+        <foreach collection="list" item="item">
+            <if test="item.CancelTime != null">
+                WHEN #{item.SubscribeID} THEN #{item.CancelTime}
+            </if>
+        </foreach>
+        END,
+        CancelReason = CASE SubscribeId
+        <foreach collection="list" item="item">
+            <if test="item.CancelReason != null">
+                WHEN #{item.SubscribeID} THEN #{item.CancelReason}
+            </if>
+        </foreach>
+        END,
+        ResultImageDeclare = CASE SubscribeId
+        <foreach collection="list" item="item">
+            <if test="item.ResultImageDeclare != null">
+                WHEN #{item.SubscribeID} THEN #{item.ResultImageDeclare}
+            </if>
+        </foreach>
+        END,
+        ResultFeatureDeclare = CASE SubscribeId
+        <foreach collection="list" item="item">
+            <if test="item.ResultFeatureDeclare != null">
+                WHEN #{item.SubscribeID} THEN #{item.ResultFeatureDeclare}
+            </if>
+        </foreach>
+        END,
+        TabID = CASE SubscribeId
+        <foreach collection="list" item="item">
+            <if test="item.TabID != null">
+                WHEN #{item.SubscribeID} THEN #{item.TabID}
+            </if>
+        </foreach>
+        END
+        WHERE SubscribeID in
+        <foreach collection="list" open="(" close=")" separator="," item="item">
+            #{item.SubscribeID}
+        </foreach>
+    </update>
+
+    <!-- 根据主键ID，更新SubscribeStatus-->
+    <update id="updateSubscribeStatus" parameterType="com.netposa.gat.model.subscribe.Subscribe">
+        UPDATE subscribe
+        SET
+        <if test='subscribe.SubscribeStatus!=null and subscribe.SubscribeStatus!=""'>
+            SubscribeStatus = #{subscribe.SubscribeStatus}
+        </if>
+        WHERE ID = #{subscribe.ID}
+    </update>
+
+    <select id="getSubscribeById" parameterType="String" resultType="com.netposa.gat.model.subscribe.Subscribe">
+        SELECT
+        a.ID,
+        a.SubscribeID,
+        a.Title,
+        a.SubscribeDetail,
+        a.ResourceURI,
+        a.ApplicantName,
+        a.ApplicantOrg,
+        a.BeginTime,
+        a.EndTime,
+        a.ReceiveAddr,
+        a.ReportInterval,
+        a.Reason,
+        a.OperateType,
+        a.SubscribeStatus,
+        a.SubscribeCancelOrg,
+        a.SubscribeCancelPerson,
+        a.CancelTime,
+        a.CancelReason,
+        a.ResultImageDeclare,
+        a.ResultFeatureDeclare,
+        a.TabID
+        FROM subscribe a
+        where a.ID = #{ID}
+    </select>
+</mapper>

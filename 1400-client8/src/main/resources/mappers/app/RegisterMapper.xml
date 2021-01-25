@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.netposa.gat.mapper.RegisterMapper">
+    <insert id="insertRegister" parameterType="com.netposa.gat.model.regist.RegisterContext">
+        replace INTO
+        register
+        (ID			,
+        DeviceID  ,
+        IP    ,
+        Port  ,
+        UserName,
+        Password,
+        RegisterTime,
+        CancelTime,
+        KeepAliveTime,
+        Status
+        )
+        values
+        (
+        #{ID,jdbcType=VARCHAR},
+        #{DeviceID,jdbcType=VARCHAR},
+        #{IP,jdbcType=VARCHAR},
+        #{Port,jdbcType=VARCHAR},
+        #{UserName,jdbcType=VARCHAR},
+        #{Password,jdbcType=VARCHAR},
+        #{RegisterTime,jdbcType=DATE},
+        #{CancelTime,jdbcType=DATE},
+        #{KeepAliveTime,jdbcType=INTEGER},
+        #{Status,jdbcType=VARCHAR}
+        )
+    </insert>
+    <resultMap type="com.netposa.gat.model.regist.RegisterContext" id="registerObjList">  
+                <result property="ID" column="ID"/>  
+                <result property="DeviceID" column="DeviceID"/>  
+                <result property="IP" column="IP"/>  
+                <result property="Port" column="Port"/> 
+                <result property="UserName" column="UserName"/>  
+                <result property="Password" column="Password"/>   
+                <result property="RegisterTime" column="RegisterTime"/>  
+                <result property="CancelTime" column="CancelTime"/>  
+                <result property="KeepAliveTime" column="KeepAliveTime"/> 
+                <result property="Status" column="Status"/> 
+     </resultMap>  
+     <select id="getRegisters"  resultMap="registerObjList">
+        SELECT * FROM  register
+    </select>
+     <select id="isRegist" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT 
+        r.Status 
+        FROM
+        register r
+        WHERE
+       	r.IP =  #{IP}
+    </select>
+    <!-- 注销 -->
+    <update id="unRegister" parameterType="com.netposa.gat.model.regist.RegisterContext">
+        UPDATE register
+        SET
+        <if test='register.Status!=null and register.Status!=""'>
+            Status = #{register.Status},
+        </if>
+        <if test='register.CancelTime!=null and register.CancelTime!=""'>
+            CancelTime = #{register.CancelTime},
+        </if>
+        WHERE DeviceID = #{register.DeviceID}
+    </update>
+     <update id="updateRegister" parameterType="com.netposa.gat.model.regist.RegisterContext">
+        UPDATE register
+        SET
+        <if test='register.Status!=null and register.Status!=""'>
+            Status = #{register.Status},
+        </if>
+        <if test='register.CancelTime!=null and register.CancelTime!=""'>
+            RegisterTime = #{register.RegisterTime},
+        </if>
+        WHERE DeviceID = #{register.DeviceID}
+    </update>
+</mapper>

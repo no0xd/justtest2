@@ -1,0 +1,48 @@
+{
+	"kafkaConfig": 
+	{
+		"kafkaList": 
+		[{
+			"topicType": "face",
+			"properties": 
+			{
+				"auto.commit.interval.ms": "1000",
+				"auto.offset.reset": "latest",
+				"bootstrap.servers": "11.20.0.207:6667",
+				"topic": "iod-1400-face",
+				"enable.auto.commit": "true",
+				"group.id":"ytlf14001",
+				"key.deserializer": "org.apache.kafka.common.serialization.StringDeserializer",
+				"value.deserializer": "org.apache.kafka.common.serialization.StringDeserializer"
+			}
+		},{
+			"topicType": "vehicle",
+			"properties": 
+			{
+				"auto.commit.interval.ms": "1000",
+				"auto.offset.reset": "latest",
+				"bootstrap.servers": "11.20.0.207:6667",
+				"topic": "iod-1400-vehicle",
+				"enable.auto.commit": "true",
+				"group.id":"ytlf14001",
+				"key.deserializer": "org.apache.kafka.common.serialization.StringDeserializer",
+				"value.deserializer": "org.apache.kafka.common.serialization.StringDeserializer"
+			}
+		}]
+	},
+	"registContextList": 
+	[{
+		"ID": "11010600125031000005",
+		"DeviceID": "11010600125031000005",
+		"IP": "11.20.0.207",
+        "UserName":"bjft",
+        "Password":"bjft",
+		"Port": "8080",
+		"KeepAliveTime":30000,
+		"Status": "C",
+		"proxyManufacturer":"netposa,hik",
+		"GreenList":"173,172",
+		"DataType":"face"
+	}],
+	"isSubscribe": "true"
+}

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="subscribe-20180424-1" author="netposa" context="base">
+        <sql>
+            <comment>订阅实体</comment>
+            CREATE TABLE `subscribe` (
+            `ID` varchar(50) NOT NULL COMMENT 'ID',
+            `SubscribeID` varchar(36) NOT NULL COMMENT '订阅标识符',
+            `Title` varchar(36) default NULL COMMENT '描述订阅的主题和目标，订阅时必选',
+            `SubscribeDetail` varchar(36) default NULL COMMENT '订阅类别，订阅时必选',
+            `ResourceURI` varchar(36) default NULL COMMENT '订阅资源路径',
+            `ApplicantName` varchar(36) default NULL COMMENT '申请人，订阅时必选',
+            `ApplicantOrg` varchar(36) default NULL COMMENT '申请单位名称',
+            `BeginTime` varchar(36) default NULL COMMENT '开始时间',
+            `EndTime` varchar(36) default NULL COMMENT '结束时间',
+            `ReceiveAddr` varchar(36) default NULL COMMENT '订阅信息接收地址',
+            `ReportInterval` int default NULL COMMENT '信息上报时间间隔',
+            `Reason` varchar(256) default NULL COMMENT '进行该订阅的理由',
+            `OperateType` varchar(36) default NULL COMMENT '操作类型，0订阅，1取消订阅',
+            `SubscribeStatus` varchar(36) default NULL COMMENT '订阅执行状态，0订阅中，1已取消订阅，2订阅到期，9未订阅',
+            `SubscribeCancelOrg` varchar(36) default NULL COMMENT '订阅取消单位，仅在取消时使用',
+            `SubscribeCancelPerson` varchar(36) default NULL COMMENT '订阅取消人，仅在取消时使用',
+            `CancelTime` varchar(36) default NULL COMMENT '订阅取消人，仅在取消时使用',
+            `CancelReason` varchar(36) default NULL COMMENT '取消原因，仅在取消时使用',
+            <!--原代码   PRIMARY KEY (`SubscribeID`) -->
+            PRIMARY KEY (`ID`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        </sql>
+    </changeSet>
+
+    <changeSet id="SubscribeNotification-20180425-1" author="netposa" context="base">
+        <sql>
+            <comment>通知实体</comment>
+            CREATE TABLE `subscribe_notification` (
+            `NotificationID` varchar(36) NOT NULL COMMENT '通知标识符',
+            `SubscribeID` varchar(36) NOT NULL COMMENT '订阅标识符',
+            `Title` varchar(36) NOT NULL COMMENT '描述订阅的主题和目标，订阅时必选',
+            `TriggerTime` varchar(36) NOT NULL COMMENT '触发时间',
+            `InfoIDs` varchar(1024) NOT NULL COMMENT '订阅通知的详细信息',
+            `CaseObjectList` text default NULL COMMENT '视频案事件信息数据集',
+            `Tollgate` text default NULL COMMENT '视频卡口信息数据集',
+            `Lane` text default NULL COMMENT '车道信息数据集',
+            `DeviceList` text default NULL COMMENT '设备信息数据集',
+            `DeviceStatusList` text default NULL COMMENT '设备状态信息数据集，批量',
+            `APSObjectList` text default NULL COMMENT '采集系统',
+            `APSStatusObjectList` text default NULL COMMENT '采集系统状态',
+            `PersonObjectList` text default NULL COMMENT '人员信息数据集',
+            `FaceObjectList` text default NULL COMMENT '人脸信息数据集',
+            `MotorVehicleObjectList` text default NULL COMMENT '机动车信息数据集',
+            `NonMotorVehicleObjectList` text default NULL COMMENT '非机动车信息数据集',
+            `ThingObjectList` text default NULL COMMENT '物品列表',
+            `SceneObjectList` text default NULL COMMENT '场景列表',
+            PRIMARY KEY (`NotificationID`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        </sql>
+    </changeSet>
+
+    <changeSet id="subscribe-20180426-1" author="netposa" context="base">
+        <sql>
+            <comment>订阅实体新增字段</comment>
+            ALTER TABLE `subscribe` ADD `ResultImageDeclare` varchar(5) NOT NULL COMMENT '返回结果图片约定';
+            ALTER TABLE `subscribe` ADD `ResultFeatureDeclare` int NOT NULL COMMENT '返回结果特征值约定';
+            ALTER TABLE `subscribe` ADD `TabID` varchar(36) default NULL COMMENT '订阅分类标签标识';
+        </sql>
+    </changeSet>
+
+    <changeSet id="subscribe-20180426-2" author="netposa" context="base">
+        <sql>
+            <comment>订阅实体不可空字段</comment>
+            ALTER TABLE `subscribe` MODIFY  COLUMN `OperateType` varchar(36) NOT NULL;
+        </sql>
+    </changeSet>
+
+    <changeSet id="subscribe-20180426-3" author="netposa" context="base">
+        <sql>
+            <comment>订阅实体字段可空</comment>
+            ALTER TABLE `subscribe` MODIFY  COLUMN `OperateType` varchar(36) default NULL;
+            ALTER TABLE `subscribe` MODIFY  COLUMN `ResultImageDeclare` varchar(36) default NULL;
+            ALTER TABLE `subscribe` MODIFY  COLUMN `ResultFeatureDeclare` varchar(36) default NULL;
+            ALTER TABLE `subscribe_notification` MODIFY  COLUMN `SubscribeID` varchar(36) default NULL;
+            ALTER TABLE `subscribe_notification` MODIFY  COLUMN `Title` varchar(36) default NULL;
+            ALTER TABLE `subscribe_notification` MODIFY  COLUMN `TriggerTime` varchar(36) default NULL;
+            ALTER TABLE `subscribe_notification` MODIFY  COLUMN `InfoIDs` varchar(1024) default NULL;
+        </sql>
+    </changeSet>
+    <changeSet id="subscribe-20180426-4" author="netposa" context="base">
+        <sql>
+            <comment>订阅字段长度修改</comment>
+            ALTER TABLE `subscribe` MODIFY  COLUMN `Title` varchar(256);
+            ALTER TABLE `subscribe` MODIFY  COLUMN `ResourceURI` varchar(256);
+            ALTER TABLE `subscribe` MODIFY  COLUMN `ReceiveAddr` varchar(256);
+            ALTER TABLE `subscribe` MODIFY  COLUMN `CancelReason` varchar(64);
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
